@@ -75,8 +75,8 @@ export function log(title: string, level: level, message: string) {
 		default:
 			type = 'UNKNOWN';
 	}
-	message = `[${formattedDateTime()}] [${type}/${title}] ${message}\n`;
-	logger.write(message);
+	message = `[${formattedDateTime()}] [${type}/${title}] ${message}`;
+	logger.write(message + '\n');
 	console.log(message);
 }
 
