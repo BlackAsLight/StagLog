@@ -1,11 +1,11 @@
 {
   "name": "staglog",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Logs Console Output to a File",
   "main": "dist/main.js",
-  "types": "dist/main.d.ts",
+  "types": "dist",
   "scripts": {
-    "start": "ts-node main.ts"
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",
