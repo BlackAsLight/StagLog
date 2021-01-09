@@ -9,6 +9,7 @@ enum level {
 	debug = 4,
 	verbose = 5
 }
+module.exports.level = level;
 
 const path = (() => {
 	if (process.env.LOG_PATH == undefined)
@@ -30,56 +31,11 @@ const file = (() => {
 })();
 
 const logger = fs.createWriteStream(path + file);
+function log() {
 
-const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay));
-
-function close() {
-	logger.end();
-	if (fs.existsSync(path + file))
-		if (fs.statSync(path + file).size == 0)
-			fs.rmSync(path + file);
 }
 
-function log(title: string, level: level, message: string) {
-	if (logger == undefined)
-		return;
-	if (level > 3)
-		switch (level) {
-			case 4:
-				if (`${process.env.DEBUG}` != 'true')
-					return;
-				break;
-			case 5:
-				if (`${process.env.VERBOSE}` != 'true')
-					return;
-				break;
-		}
-	let type = '';
-	switch (level) {
-		case 5:
-			type = 'VERBOSE';
-			break;
-		case 4:
-			type = 'DEBUG';
-			break;
-		case 3:
-			type = 'INFO';
-			break;
-		case 2:
-			type = 'WARNING';
-			break;
-		case 1:
-			type = 'ERROR';
-			break;
-		case 0:
-			type = 'FETAL';
-			break;
-		default:
-			type = 'UNKNOWN';
-	}
-	message = `[${formattedDateTime}] [${type}/${title}] ${message}\n`;
-	logger.write(message);
-}
+module.exports.log = log;
 
 function checkPath(path: string) {
 	let folders = path.split('/');
@@ -111,7 +67,52 @@ function doubleDigit(number: number) {
 	return number < 10 ? `0${number}` : number.toString();
 }
 
-(async () => {
-	await sleep(10000);
-	close();
-})();
+module.exports = {
+	close: function () {
+		logger.end();
+		if (fs.existsSync(path + file))
+			if (fs.statSync(path + file).size == 0)
+				fs.rmSync(path + file);
+	},
+	log: function (title: string, level: level, message: string) {
+		if (logger == undefined)
+			return;
+		if (level > 3)
+			switch (level) {
+				case 4:
+					if (`${process.env.DEBUG}` != 'true')
+						return;
+					break;
+				case 5:
+					if (`${process.env.VERBOSE}` != 'true')
+						return;
+					break;
+			}
+		let type = '';
+		switch (level) {
+			case 5:
+				type = 'VERBOSE';
+				break;
+			case 4:
+				type = 'DEBUG';
+				break;
+			case 3:
+				type = 'INFO';
+				break;
+			case 2:
+				type = 'WARNING';
+				break;
+			case 1:
+				type = 'ERROR';
+				break;
+			case 0:
+				type = 'FETAL';
+				break;
+			default:
+				type = 'UNKNOWN';
+		}
+		message = `[${formattedDateTime}] [${type}/${title}] ${message}\n`;
+		logger.write(message);
+		console.log(message);
+	}
+};

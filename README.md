@@ -1,17 +1,8 @@
-## Requirements!
-You'll need [Node.js](https://nodejs.org/en/) npm.
+# What Is This?
+A simply logger package for logging console input to a file.
 
-## Set Up
-Create file `.env` in the root of the folder with info:
-```
-DEBUG=
-VERBOSE=
-LOG_PATH=
-```
-Use `.env.example` as a reference to what the inputs should look like.
-
-Run `npm i -g npm` to check you have the latest version.
-Run `npm update` to download the necessary dependencies.
-
-## Run
-`npm start`
+# Installation
+`npm i staglog`
+## Options
+In a `.env` file you can add boolean `DEBUG` and `VERBOSE` values to have certain stuff only get logged in development environments.
+You can also change the default path, `./logs/`, the log files end up by adding `LOG_PATH` to the `.env` file.

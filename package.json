@@ -1,8 +1,9 @@
 {
   "name": "staglog",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Logs Console Output to a File",
-  "main": "main.ts",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
     "start": "ts-node main.ts"
   },
