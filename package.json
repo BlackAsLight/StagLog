@@ -1,6 +1,6 @@
 {
   "name": "staglog",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Logs Console Output to a File",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
