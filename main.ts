@@ -21,12 +21,13 @@ const path = (() => {
 
 const file = (() => {
 	checkPath(path);
+	let prefix = process.env.LOG_PREFIX == undefined ? '' : process.env.LOG_PREFIX + ' ';
 	let name = formattedDate();
 	let files = fs.readdirSync(path).filter(file => file.startsWith(name));
 	let num = '';
 	if (files.length != 0)
 		num = ` ${files.length}`;
-	return name + num + '.log';
+	return prefix + name + num + '.log';
 })();
 
 const logger = fs.createWriteStream(path + file);
