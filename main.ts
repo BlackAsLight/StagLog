@@ -32,7 +32,7 @@ const file = (() => {
 
 const logger = fs.createWriteStream(path + file);
 
-export function close() {
+export function closeLogger() {
 	logger.end();
 	if (fs.existsSync(path + file))
 		if (fs.statSync(path + file).size == 0)
@@ -40,8 +40,6 @@ export function close() {
 }
 
 export function log(title: string, level: level, message: string) {
-	if (logger == undefined)
-		return;
 	if (level > 3)
 		switch (level) {
 			case 4:
@@ -77,7 +75,8 @@ export function log(title: string, level: level, message: string) {
 			type = 'UNKNOWN';
 	}
 	message = `[${formattedDateTime()}] [${type}/${title}] ${message}`;
-	logger.write(message + '\n');
+	if (logger != undefined)
+		logger.write(message + '\n');
 	console.log(message);
 }
 
