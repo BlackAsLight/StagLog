@@ -1,5 +1,6 @@
 require(`dotenv`).config();
 import fs from 'fs';
+import schedule from 'node-schedule';
 
 export enum level {
 	fetal = 0,
@@ -18,26 +19,14 @@ const path = (() => {
 		path += '/';
 	return path;
 })();
+let file = getFile();
+let logger = fs.createWriteStream(path + file);
 
-const file = (() => {
-	checkPath(path);
-	let name = process.env.LOG_PREFIX == undefined ? '' : process.env.LOG_PREFIX + ' ';
-	name += formattedDate();
-	let files = fs.readdirSync(path).filter(file => file.startsWith(name));
-	let num = '';
-	if (files.length != 0)
-		num = ` ${files.length}`;
-	return name + num + '.log';
-})();
-
-const logger = fs.createWriteStream(path + file);
-
-export function closeLogger() {
-	logger.end();
-	if (fs.existsSync(path + file))
-		if (fs.statSync(path + file).size == 0)
-			fs.rmSync(path + file);
-}
+schedule.scheduleJob('Stag Logger', '0 0 * * *', () => {
+	close();
+	file = getFile();
+	logger = fs.createWriteStream(path + file);
+});
 
 export function log(title: string, level: level, message: string) {
 	if (level > 3)
@@ -76,8 +65,40 @@ export function log(title: string, level: level, message: string) {
 	}
 	message = `[${formattedDateTime()}] [${type}/${title}] ${message}`;
 	if (logger != undefined)
-		logger.write(message + '\n');
+		try {
+			logger.write(message + '\n');
+		}
+		catch (e) {
+			console.log(`[${formattedDateTime()}] [ERROR/StagLog] ${e}`);
+		}
 	console.log(message);
+}
+
+export function closeLogger() {
+	schedule.cancelJob('Stag Logger');
+	close();
+}
+
+function close() {
+	logger.end();
+	if (fs.existsSync(path + file))
+		if (fs.statSync(path + file).size == 0)
+			fs.rmSync(path + file);
+}
+
+function getFile() {
+	checkPath(path);
+	let name = process.env.LOG_PREFIX == undefined ? '' : process.env.LOG_PREFIX + ' ';
+	name += formattedDate();
+	let files = fs.readdirSync(path).filter(file => file.startsWith(name));
+	let num = 0;
+	if (files.length != 0)
+		num = files.length;
+	while (fs.existsSync(`${name} ${num}.log`))
+		num++;
+	if (num == 0)
+		return `${name}.log`;
+	return `${name} ${num}.log`;
 }
 
 function checkPath(path: string) {
