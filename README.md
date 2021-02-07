@@ -1,5 +1,5 @@
 # What Is This?
-A simple logger package for logging console input to a file.
+A simple package that prints to the console and saves said logs to a file. Logs are grouped by date. Older log files will be gzip, and log files created on the same day will be concatenated into one file labeled with said date. Using `closeLogger()` isn't required when quitting the application, but it is recommended.
 # Installation
 `npm i staglog`
 ```
@@ -8,6 +8,7 @@ import { log, level, closeLogger } from 'staglog';
 // Example
 log('Title', level.info, 'Hello World!');
 closeLogger();
+// Console Output: [YYYY-MM-DD-HH-MM-SS] [INFO/Title] Hello World!
 ```
 ## Options
 In a `.env` file you can add boolean `DEBUG` and `VERBOSE` values to have certain stuff only get logged in development environments.
