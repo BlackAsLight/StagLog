@@ -188,16 +188,3 @@ function formattedTime(time: Date = new Date(), separator: string = '-') {
 function doubleDigit(number: number) {
 	return number < 10 ? `0${number}` : number.toString();
 }
-
-let dic = [
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-	'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-	'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-for (let j = 0; j < 50; j++) {
-	let string = '';
-	for (let i = 0; i < 1000; i++)
-		string += dic[Math.floor(Math.random() * dic.length)];
-	log('Potato', level.info, string);
-}
